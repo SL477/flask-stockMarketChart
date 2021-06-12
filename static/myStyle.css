@@ -4,3 +4,31 @@ body {
     background: #edc0bf;
     background: linear-gradient(90deg, #edc0bf, #c4caef 58%);
 }
+
+svg {
+    display: block;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 5em;
+}
+
+.dot {
+    fill: red;
+    background-color: red;
+    color: red;
+}
+
+.tooltip {
+    background-color: blue;
+    border: solid;
+    border-width: 2px;
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+}
+
+.line {
+    fill: none;
+    stroke: red;
+    stroke-width: 2px;
+}
