@@ -12,23 +12,39 @@ svg {
     border-radius: 5em;
 }
 
-.dot {
+/*.dot {
     fill: red;
     background-color: red;
     color: red;
-}
+}*/
 
-.tooltip {
+/*.tooltip {
     background-color: blue;
     border: solid;
     border-width: 2px;
     border-radius: 5px;
     padding: 5px;
     color: white;
-}
+}*/
 
 .line {
     fill: none;
-    stroke: red;
+    /*stroke: red;*/
     stroke-width: 2px;
+}
+
+.red {
+    color: red;
+}
+.blue {
+    color: blue;
+}
+.black {
+    color: black;
+}
+.green {
+    color: green;
+}
+.yellow {
+    color: yellow;
 }
