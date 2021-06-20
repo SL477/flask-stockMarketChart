@@ -12,11 +12,11 @@ socket.on("connect", function() {
     console.log("connected");
     socket.emit("connected",{data:''});
 });*/
-let stocks = ["ABC"];
+let stocks = [];
 var socket = io();
-socket.on("connect", function() {
+/*socket.on("connect", function() {
     socket.emit("stocks", stocks);
-});
+});*/
 
 let dArray = [];
 const colors = [
@@ -33,11 +33,11 @@ function getStockPrices() {
         alert("Stock code is required!");
         return;
     }
-    if (dArray.length >= 5) {
+    if (stocks.length >= 5) {
         alert("Maximum of 5 stocks to track");
         return;
     }
-    $.post("/prices", {stockCode: code}, function(data) {
+    /*$.post("/prices", {stockCode: code}, function(data) {
         console.log(data);
         //visualize(data);
         let dataArray = [];
@@ -50,7 +50,9 @@ function getStockPrices() {
         });
         dArray.push(dataArray);
         visualize();
-    });
+    });*/
+    stocks.push(code.toUpperCase());
+    socket.emit("stocksrec", stocks);
 }
 
 function visualize() {
@@ -208,14 +210,38 @@ function visualize() {
 }
 
 function removeStock(i) {
-    /*dArray = */dArray.splice(i,1);
+    let s = dArray[i][0]["company"];
+    dArray.splice(i,1);
     console.log(dArray);
-    visualize();
+    socket.emit("removestock", s);
+    //visualize();
 }
 
 socket.on("stocks", function(event) {
     //socket.emit("stocks", {data: 'ABC'});
     console.log("received", event);
+    stocks = event;
+    dArray = [];
+    stocks.forEach(s => {
+        $.post("/prices", {stockCode: s}, function(data) {
+            console.log(data);
+            //visualize(data);
+            let dataArray = [];
+            Object.keys(data["Time Series (Daily)"]).forEach(element => {
+                let d = data["Time Series (Daily)"][element];
+                //console.log(d);
+                d["date"] = new Date(element);
+                d["company"] = data["Meta Data"]["2. Symbol"];
+                dataArray.push(d);
+            });
+            dArray.push(dataArray);
+            visualize();
+        });
+    });
+});
+
+socket.on("message", function(event){
+    console.log("receivedMessage", event);
 });
 
 $( document ).ready(function() {

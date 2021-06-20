@@ -26,7 +26,7 @@ def style():
     return redirect(url_for("static", filename="myStyle.css"))
 
 @app.route("/stocks.js")
-def stocks():
+def stonks():
     return redirect(url_for("static", filename="stocks.js"))
 
 @app.route("/prices", methods=["POST"])
@@ -45,7 +45,9 @@ def getStocks():
     """
     Emit the list of stocks to all of the receivers
     """
-    emit("stocks", stocks)
+    global stocks
+    emit("stocks", stocks, broadcast=True)
+    print("emitted stocks")
 
 @socketio.on('message')
 def handle_message(data):
@@ -54,20 +56,21 @@ def handle_message(data):
     getStocks()
 
 @socketio.on("connect")
-def test():
+def test(data=""):
     """
     When the items connect emit the current list of stocks
     """
     #emit("stocks", getStocks())
     getStocks()
 
-@socketio.on("stocks")
+@socketio.on("stocksrec")
 def receivedStocks(data):
     """
     Received a stock from the JavaScript App
     """
     for stock in data:
         print("Received message: " + stock)
+        global stocks
         if stock not in stocks:
             if len(stocks) < 5:
                 stocks.append(stock)
@@ -78,6 +81,7 @@ def removeStock(data):
     """
     Remove a stock from the list
     """
+    global stocks
     stocks.remove(data)
     getStocks()
 
