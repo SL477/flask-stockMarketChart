@@ -1,6 +1,7 @@
 from flask import Flask, redirect, url_for, request
 from key import apikey
 import requests
+from flask_socketio import SocketIO, send, emit
 
 '''
 apikey function (hidden by GitIgnore)
@@ -35,5 +36,26 @@ def getPrices():
     r = requests.get(url)
     return r.json()
 
+socketio = SocketIO(app)
+
+def getStocks():
+    return ["IBM"]
+
+@socketio.on('message')
+def handle_message(data):
+    print("received message: " + data)
+    emit('stocks', getStocks())
+
+@socketio.on("connect")
+def test():
+    emit("stocks", getStocks())
+
+@socketio.on("stocks")
+def receivedStocks(data):
+    for stock in data:
+        print("Received message: " + stock)
+    
+
 if __name__ == "__main__":
-    app.run()
+    #app.run()
+    socketio.run(app, host = "0.0.0.0")

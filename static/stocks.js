@@ -1,4 +1,22 @@
 console.log("test");
+/*const socket = new WebSocket('ws://localhost:5000');
+socket.addEventListener('open', function(event) {
+    socket.send('test');
+});
+
+socket.addEventListener("message", function(event) {
+    console.log("Message from server", event.data);
+});*/
+/*var socket = io.connect("https://localhost:5000");
+socket.on("connect", function() {
+    console.log("connected");
+    socket.emit("connected",{data:''});
+});*/
+let stocks = ["ABC"];
+var socket = io();
+socket.on("connect", function() {
+    socket.emit("stocks", stocks);
+});
 
 let dArray = [];
 const colors = [
@@ -194,6 +212,11 @@ function removeStock(i) {
     console.log(dArray);
     visualize();
 }
+
+socket.on("stocks", function(event) {
+    //socket.emit("stocks", {data: 'ABC'});
+    console.log("received", event);
+});
 
 $( document ).ready(function() {
     //visualize(dummyData);
