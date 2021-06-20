@@ -14,6 +14,9 @@ def apikey():
 
 app = Flask(__name__)
 
+# Hold everyones stocks
+stocks = []
+
 @app.route("/")
 def index():
     return redirect(url_for('static', filename="index.html"))
@@ -39,22 +42,44 @@ def getPrices():
 socketio = SocketIO(app)
 
 def getStocks():
-    return ["IBM"]
+    """
+    Emit the list of stocks to all of the receivers
+    """
+    emit("stocks", stocks)
 
 @socketio.on('message')
 def handle_message(data):
     print("received message: " + data)
-    emit('stocks', getStocks())
+    #emit('stocks', getStocks())
+    getStocks()
 
 @socketio.on("connect")
 def test():
-    emit("stocks", getStocks())
+    """
+    When the items connect emit the current list of stocks
+    """
+    #emit("stocks", getStocks())
+    getStocks()
 
 @socketio.on("stocks")
 def receivedStocks(data):
+    """
+    Received a stock from the JavaScript App
+    """
     for stock in data:
         print("Received message: " + stock)
+        if stock not in stocks:
+            if len(stocks) < 5:
+                stocks.append(stock)
+    getStocks()
     
+@socketio.on("removestock")
+def removeStock(data):
+    """
+    Remove a stock from the list
+    """
+    stocks.remove(data)
+    getStocks()
 
 if __name__ == "__main__":
     #app.run()
