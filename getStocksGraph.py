@@ -5,6 +5,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import io
+import base64
 
 def GetPrices(stock):
     '''
@@ -63,4 +65,12 @@ def GetStocksGraph(stocks_list):
     plt.xlabel('Day')
     plt.gca().xaxis.set_minor_locator(mdates.DayLocator())
     plt.ylim(top=y_max, bottom=y_min)
-    plt.show()
+    #plt.show()
+    stringIObytes = io.BytesIO()
+    plt.savefig(stringIObytes, format='jpg')
+    stringIObytes.seek(0)
+    return base64.b64encode(stringIObytes.read())
+
+if __name__ == '__main__':
+    print(GetStocksGraph(['IBM','TSLA']))
+    #GetStocksGraph(['IBM','TSLA'])

@@ -2,6 +2,7 @@ from flask import Flask, redirect, url_for, request
 from key import apikey
 import requests
 from flask_socketio import SocketIO, send, emit
+from getStocksGraph import GetStocksGraph
 
 '''
 apikey function (hidden by GitIgnore)
@@ -43,10 +44,11 @@ socketio = SocketIO(app)
 
 def getStocks():
     """
-    Emit the list of stocks to all of the receivers
+    Emit the list of stocks to all of the receivers, plus the graph
     """
     global stocks
     emit("stocks", stocks, broadcast=True)
+    emit("stockgraph", GetStocksGraph(stocks).decode("utf-8"), broadcast=True)
     print("emitted stocks")
 
 @socketio.on('message')
