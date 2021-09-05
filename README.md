@@ -11,3 +11,7 @@ docker build -t stockmarketchart .
 
 Run with:
 docker run -dp 5000:5000 stockmarketchart
+
+## Heroku
+Old procfile command
+web: gunicorn wsgi:app

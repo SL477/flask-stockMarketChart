@@ -20,16 +20,20 @@ def ConvertJsonToDataFrame(data):
     '''
     Put in the json from the GetPrices API and return a dataframe of the clean data
     '''
-    df = pd.DataFrame.from_dict(data['Time Series (Daily)'])
-    df = df.transpose()
-    df.index = pd.to_datetime(df.index)
-    df = df.sort_index()
-    df = df.rename(columns={'1. open': 'open', '2. high': 'high', '3. low': 'low', '4. close': 'close', '5. volume': 'volume'})
-    df['close'] = df['close'].astype(float)
-    df['open'] = df['open'].astype(float)
-    df['high'] = df['high'].astype(float)
-    df['low'] = df['low'].astype(float)
-    df['volume'] = df['volume'].astype(int)
+    
+    try:
+        df = pd.DataFrame.from_dict(data['Time Series (Daily)'])
+        df = df.transpose()
+        df.index = pd.to_datetime(df.index)
+        df = df.sort_index()
+        df = df.rename(columns={'1. open': 'open', '2. high': 'high', '3. low': 'low', '4. close': 'close', '5. volume': 'volume'})
+        df['close'] = df['close'].astype(float)
+        df['open'] = df['open'].astype(float)
+        df['high'] = df['high'].astype(float)
+        df['low'] = df['low'].astype(float)
+        df['volume'] = df['volume'].astype(int)
+    except:
+        print('data',data)
     return df
 
 def GetStocksGraph(stocks_list):
