@@ -15,3 +15,5 @@ docker run -dp 5000:5000 stockmarketchart
 ## Heroku
 Old procfile command
 web: gunicorn wsgi:app
+
+git push heroku (sign into the Heroku cli with heroku login)
