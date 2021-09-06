@@ -48,3 +48,12 @@ svg {
 .yellow {
     color: yellow;
 }
+
+.pic {
+    max-width: 100%;
+    height: auto;
+}
+
+.center {
+    text-align: center;
+}

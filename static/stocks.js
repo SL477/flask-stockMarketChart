@@ -38,5 +38,5 @@ socket.on("message", function(event){
 socket.on("stockgraph", function(event) {
     $("#holder").empty();
     //console.log('stockgraph', event);
-    $("#holder").append("<img src='data:image/png;base64, " + event + "' alt='stocks'/>");
+    $("#holder").append("<img class='pic' src='data:image/png;base64, " + event + "' alt='stocks'/>");
 });

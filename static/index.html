@@ -15,18 +15,19 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 	</head>
 	<body>
-        <h1>Chart The Stock Market</h1>
+		<div class="container-fluid">
+			<h1 class="center">Chart The Stock Market</h1>
 
-		<ul id="key"></ul>
-        <div id="holder"></div>
+			<ul id="key"></ul>
+			<div id="holder"></div>
 
-        <fieldset>
-            <legend>Add Stock</legend>
-            <label for="stockCode">Stock Code:</label>
-            <input id="stockCode" name="stockCode" type="text" required/>
-            <button class="btn btn-primary" onclick="getStockPrices();">Submit</button>
-        </fieldset>
-
+			<fieldset>
+				<legend>Add Stock</legend>
+				<label for="stockCode">Stock Code:</label>
+				<input id="stockCode" name="stockCode" type="text" class="form-control" required/>
+				<button class="btn btn-primary" onclick="getStockPrices();">Submit</button>
+			</fieldset>
+		</div>
         <script src="https://d3js.org/d3.v4.min.js"></script>
         <script src="stocks.js"></script>
     </body>
