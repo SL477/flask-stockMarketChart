@@ -8,19 +8,14 @@ import matplotlib.dates as mdates
 import io
 import base64
 
-def GetPrices(stock):
-    '''
-    This is to get the data from Alpha Vantage
-    '''
+def GetPrices(stock: str) -> str:
+    """This is to get the data from Alpha Vantage"""
     url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={stock}&apikey={apikey()}"
     r = requests.get(url)
     return r.json()
 
-def ConvertJsonToDataFrame(data):
-    '''
-    Put in the json from the GetPrices API and return a dataframe of the clean data
-    '''
-    
+def ConvertJsonToDataFrame(data: str) -> pd.DataFrame:
+    """Put in the json from the GetPrices API and return a dataframe of the clean data"""
     try:
         df = pd.DataFrame.from_dict(data['Time Series (Daily)'])
         df = df.transpose()
@@ -32,23 +27,31 @@ def ConvertJsonToDataFrame(data):
         df['high'] = df['high'].astype(float)
         df['low'] = df['low'].astype(float)
         df['volume'] = df['volume'].astype(int)
+        return df
     except:
         print('data',data)
-    return df
 
-def GetStocksGraph(stocks_list):
-    '''
-    Send in a list of stocks and get a graph out
-    '''
+def GetStocksGraph(stocks_list: list) -> str:
+    """Send in a list of stocks and get a graph out"""
     df = None
-    for s in stocks_list:
+    rmv_list = []
+    for idx, s in enumerate(stocks_list):
         if df is None:
             df = ConvertJsonToDataFrame(GetPrices(s))
-            df['code'] = s
+            if df is not None:
+                df['code'] = s
+            else:
+                rmv_list.append(idx)
         else:
             sdf = ConvertJsonToDataFrame(GetPrices(s))
-            sdf['code'] = s
-            df = df.append(sdf)
+            if sdf is not None:
+                sdf['code'] = s
+                df = df.append(sdf)
+            else:
+                rmv_list.append(idx)
+    # remove invalid stocks
+    for idx in reversed(rmv_list):
+        stocks_list.pop(idx)
     plt.clf()
     plt.figure(figsize=(15,8))
     if df is None:

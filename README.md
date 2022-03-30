@@ -10,14 +10,27 @@ Make as part of FreeCodeCamp's challenge https://www.freecodecamp.org/learn/codi
 ![Finished stock market chart](https://link477.com/dataScience/ChartTheStockMarket.JPG)
 
 ## Docker
+
 Build with:
+
+```bash
 docker build -t stockmarketchart .
+```
 
 Run with:
+
+```bash
 docker run -dp 5000:5000 stockmarketchart
+```
 
 ## Heroku
-Old procfile command
-web: gunicorn wsgi:app
 
-git push heroku (sign into the Heroku cli with heroku login)
+Old procfile command
+
+>web: gunicorn wsgi:app
+
+```bash
+git push heroku
+```
+
+(sign into the Heroku cli with heroku login)

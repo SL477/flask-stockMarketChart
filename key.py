@@ -1,9 +1,8 @@
 import os
 from dotenv import load_dotenv
-def apikey():
-    '''
-    Return the api key
-    '''
+
+def apikey() -> str:
+    """Return the api key"""
     load_dotenv()
     return str(os.environ.get('KEY',''))
 

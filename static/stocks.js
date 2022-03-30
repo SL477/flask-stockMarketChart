@@ -1,10 +1,8 @@
-console.log("test");
 let stocks = [];
 var socket = io();
 
-
 function getStockPrices() {
-    let code = $("#stockCode").val();
+    var code = $("#stockCode").val();
     if (!code || code == "") {
         alert("Stock code is required!");
         return;
@@ -15,10 +13,13 @@ function getStockPrices() {
     }
     stocks.push(code.toUpperCase());
     socket.emit("stocksrec", stocks);
+
+    // delete text
+    $("#stockCode").val("");
 }
 
 function removeStock(i) {
-    let s = stocks[i];
+    var s = stocks[i];
     socket.emit("removestock", s);
 }
 
@@ -39,4 +40,12 @@ socket.on("stockgraph", function(event) {
     $("#holder").empty();
     //console.log('stockgraph', event);
     $("#holder").append("<img class='pic' src='data:image/png;base64, " + event + "' alt='stocks'/>");
+});
+
+// tie the button to the enter key on the input field
+document.getElementById("stockCode").addEventListener("keyup", function(evnt) {
+    if (evnt.key == "Enter") {
+        evnt.preventDefault();
+        document.getElementById("btn").click();
+    }
 });

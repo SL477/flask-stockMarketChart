@@ -4,15 +4,6 @@ import requests
 from flask_socketio import SocketIO, send, emit
 from getStocksGraph import GetStocksGraph
 
-'''
-apikey function (hidden by GitIgnore)
-def apikey():
-    
-    Return the api key
-    
-    return "[MyKey]"
-'''
-
 app = Flask(__name__)
 
 # Hold everyones stocks
@@ -32,9 +23,7 @@ def stonks():
 
 @app.route("/prices", methods=["POST"])
 def getPrices():
-    """
-    Get the prices from alphavantage
-    """
+    """Get the prices from alphavantage"""
     stockCode = str(request.form.get("stockCode"))
     url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={stockCode}&apikey={apikey()}"
     r = requests.get(url)
@@ -43,9 +32,7 @@ def getPrices():
 socketio = SocketIO(app)
 
 def getStocks():
-    """
-    Emit the list of stocks to all of the receivers, plus the graph
-    """
+    """Emit the list of stocks to all of the receivers, plus the graph"""
     global stocks
     emit("stocks", stocks, broadcast=True)
     emit("stockgraph", GetStocksGraph(stocks).decode("utf-8"), broadcast=True)
@@ -59,17 +46,13 @@ def handle_message(data):
 
 @socketio.on("connect")
 def test(data=""):
-    """
-    When the items connect emit the current list of stocks
-    """
+    """When the items connect emit the current list of stocks"""
     #emit("stocks", getStocks())
     getStocks()
 
 @socketio.on("stocksrec")
 def receivedStocks(data):
-    """
-    Received a stock from the JavaScript App
-    """
+    """Received a stock from the JavaScript App"""
     for stock in data:
         print("Received message: " + stock)
         global stocks
@@ -80,9 +63,7 @@ def receivedStocks(data):
     
 @socketio.on("removestock")
 def removeStock(data):
-    """
-    Remove a stock from the list
-    """
+    """Remove a stock from the list"""
     global stocks
     stocks.remove(data)
     getStocks()

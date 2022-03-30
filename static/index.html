@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<title>Chart the Stock Market</title>
 		<link rel="icon" href="https://link477.com/images/link477.png"/>
@@ -7,11 +7,10 @@
 		<meta charset="utf-8" />
 		<meta content="Tom Fishwick"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.css">
-  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
-  		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 	</head>
 	<body>
@@ -25,10 +24,9 @@
 				<legend>Add Stock</legend>
 				<label for="stockCode">Stock Code:</label>
 				<input id="stockCode" name="stockCode" type="text" class="form-control" required/>
-				<button class="btn btn-primary" onclick="getStockPrices();">Submit</button>
+				<button class="btn btn-primary" onclick="getStockPrices();" id="btn">Submit</button>
 			</fieldset>
 		</div>
-        <script src="https://d3js.org/d3.v4.min.js"></script>
         <script src="stocks.js"></script>
     </body>
 </html>
