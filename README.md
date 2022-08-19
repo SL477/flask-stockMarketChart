@@ -1,9 +1,10 @@
-# flask-stockMarketChart
+# Flask-stockMarketChart
+
  Chart the stock market
 
-Uses https://www.alphavantage.co/documentation/
+Uses [Alpha Vantage to get the data](https://www.alphavantage.co/documentation/)
 
-Make as part of FreeCodeCamp's challenge https://www.freecodecamp.org/learn/coding-interview-prep/take-home-projects/chart-the-stock-market
+Make as part of [FreeCodeCamp's challenge](https://www.freecodecamp.org/learn/coding-interview-prep/take-home-projects/chart-the-stock-market)
 
 [Link to live project](https://limitless-ridge-52978.herokuapp.com/static/index.html)
 
@@ -21,6 +22,22 @@ Run with:
 
 ```bash
 docker run -dp 5000:5000 stockmarketchart
+```
+
+## Python Environment
+
+```bash
+# Create environment
+python3 -m venv smc
+
+# Activate environment (Linux/Mac)
+source smc/bin/activate
+
+# Activate environment (Windows)
+smc\Scripts\activate.bat
+
+# Install required packages
+python3 -m pip install -r requirements.txt
 ```
 
 ## Heroku

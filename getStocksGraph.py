@@ -31,7 +31,7 @@ def ConvertJsonToDataFrame(data: str) -> pd.DataFrame:
     except:
         print('data',data)
 
-def GetStocksGraph(stocks_list: list) -> str:
+def GetStocksGraph(stocks_list: list, stock_labels: dict) -> str:
     """Send in a list of stocks and get a graph out"""
     df = None
     rmv_list = []
@@ -63,7 +63,7 @@ def GetStocksGraph(stocks_list: list) -> str:
         
         for code in df['code'].unique():
             temp = df[df['code'] == code]
-            plt.plot(temp.index, temp['close'], label=code)
+            plt.plot(temp.index, temp['close'], label=f"{code} - {stock_labels.get(code, code)}")
         #print(code, np.max(temp['close']))
         plt.legend()
     myFmt = mdates.DateFormatter('%b-%y')

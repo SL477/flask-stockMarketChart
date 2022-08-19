@@ -1,25 +1,21 @@
-from flask import Flask, redirect, url_for, request
+from flask import Flask, request, render_template
 from key import apikey
 import requests
-from flask_socketio import SocketIO, send, emit
+from flask_socketio import SocketIO, emit
 from getStocksGraph import GetStocksGraph
+from get_tickers import get_tickers
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 
 # Hold everyones stocks
 stocks = []
 
+# get the data for the stock market names and tickers
+stock_symbols_name = get_tickers()
+
 @app.route("/")
 def index():
-    return redirect(url_for('static', filename="index.html"))
-
-@app.route("/myStyle.css")
-def style():
-    return redirect(url_for("static", filename="myStyle.css"))
-
-@app.route("/stocks.js")
-def stonks():
-    return redirect(url_for("static", filename="stocks.js"))
+    return render_template("index.html", stock_symbols_name=stock_symbols_name)
 
 @app.route("/prices", methods=["POST"])
 def getPrices():
@@ -34,8 +30,12 @@ socketio = SocketIO(app)
 def getStocks():
     """Emit the list of stocks to all of the receivers, plus the graph"""
     global stocks
-    emit("stocks", stocks, broadcast=True)
-    emit("stockgraph", GetStocksGraph(stocks).decode("utf-8"), broadcast=True)
+    # get the names of the stocks to send back
+    dict_stocks: dict = dict(stock_symbols_name)
+    stks = [f"{x} - {dict_stocks.get(x, x)}" for x in stocks]
+
+    emit("stocks", stks, broadcast=True)
+    emit("stockgraph", GetStocksGraph(stocks, dict_stocks).decode("utf-8"), broadcast=True)
     print("emitted stocks")
 
 @socketio.on('message')

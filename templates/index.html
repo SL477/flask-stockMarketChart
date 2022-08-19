@@ -22,8 +22,14 @@
 
 			<fieldset>
 				<legend>Add Stock</legend>
-				<label for="stockCode">Stock Code:</label>
-				<input id="stockCode" name="stockCode" type="text" class="form-control" required/>
+				<label for="stockCode" class="form-label">Stock Code:</label>
+				<!-- <input id="stockCode" name="stockCode" type="text" class="form-control" required/> -->
+				<select id="stockCode" name="stockCode" class="form-control" required>
+					<option value="" disabled selected="true">-- Please Select --</option>
+					{% for sym, nm in stock_symbols_name %}
+						<option value="{{ sym }}">{{ sym }} - {{ nm }}</option>
+					{% endfor %}
+				</select>
 				<button class="btn btn-primary" onclick="getStockPrices();" id="btn">Submit</button>
 			</fieldset>
 		</div>

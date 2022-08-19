@@ -25,11 +25,15 @@ function removeStock(i) {
 
 socket.on("stocks", function(event) {
     console.log("received", event);
-    stocks = event;
+    stks = event;
+    tmp = []
     $("#key").empty();
-    stocks.forEach((s, ind) => {
+    stks.forEach((s, ind) => {
+        var split_s = s.split(' - ');
         $("#key").append("<li onClick='removeStock(" + ind +")'>" + s + "</li>");
+        tmp.push(split_s[0]);
     });
+    stocks = tmp;
 });
 
 socket.on("message", function(event){
