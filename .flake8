@@ -1,0 +1,8 @@
+[flake8]
+exclude = 
+    smc,
+    __pycache__,
+    .devcontainer,
+    .ipynb_checkpoints
+per-file-ignores =
+    getStocksGraph.py: E722

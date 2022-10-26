@@ -1,4 +1,5 @@
-let stocks = [];
+'use strict'
+var stocks = [];
 var socket = io();
 
 function getStockPrices() {
@@ -25,8 +26,8 @@ function removeStock(i) {
 
 socket.on("stocks", function(event) {
     console.log("received", event);
-    stks = event;
-    tmp = []
+    var stks = event;
+    var tmp = []
     $("#key").empty();
     stks.forEach((s, ind) => {
         var split_s = s.split(' - ');
