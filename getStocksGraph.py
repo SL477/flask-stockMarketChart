@@ -1,23 +1,24 @@
 # This is to get the stocks graph
-from key import apikey
-import requests
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import io
 import base64
+import requests
+import os
 
 
-def GetPrices(stock: str) -> str:
-    """This is to get the data from Alpha Vantage"""
-    u = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='
-    u += f"{stock}&apikey={apikey()}"
+def getPricesForStock(stock: str) -> dict:
+    """Get the prices from alphavantage"""
+    u = 'https://www.alphavantage.co/query'
+    u += '?function=TIME_SERIES_DAILY_ADJUSTED&symbol='
+    u += f"{stock}&apikey={os.environ.get('KEY', '')}"
     r = requests.get(u)
     return r.json()
 
 
-def ConvertJsonToDataFrame(data: str) -> pd.DataFrame:
+def ConvertJsonToDataFrame(data: dict) -> pd.DataFrame:
     """Put in the json from the GetPrices API and return a dataframe of the
     clean data"""
     try:
@@ -30,15 +31,15 @@ def ConvertJsonToDataFrame(data: str) -> pd.DataFrame:
             '2. high': 'high',
             '3. low': 'low',
             '4. close': 'close',
-            '5. volume': 'volume'})
+            '6. volume': 'volume'})
         df['close'] = df['close'].astype(float)
         df['open'] = df['open'].astype(float)
         df['high'] = df['high'].astype(float)
         df['low'] = df['low'].astype(float)
         df['volume'] = df['volume'].astype(int)
         return df
-    except:
-        print('data', data)
+    except Exception as e:
+        print('data', data, 'Exception:', e)
 
 
 def GetStocksGraph(stocks_list: list, stock_labels: dict) -> str:
@@ -47,13 +48,13 @@ def GetStocksGraph(stocks_list: list, stock_labels: dict) -> str:
     rmv_list = []
     for idx, s in enumerate(stocks_list):
         if df is None:
-            df = ConvertJsonToDataFrame(GetPrices(s))
+            df = ConvertJsonToDataFrame(getPricesForStock(s))
             if df is not None:
                 df['code'] = s
             else:
                 rmv_list.append(idx)
         else:
-            sdf = ConvertJsonToDataFrame(GetPrices(s))
+            sdf = ConvertJsonToDataFrame(getPricesForStock(s))
             if sdf is not None:
                 sdf['code'] = s
                 df = df.append(sdf)

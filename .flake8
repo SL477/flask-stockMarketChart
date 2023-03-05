@@ -4,5 +4,5 @@ exclude =
     __pycache__,
     .devcontainer,
     .ipynb_checkpoints
-per-file-ignores =
-    getStocksGraph.py: E722
+# per-file-ignores =
+#     getStocksGraph.py: E722

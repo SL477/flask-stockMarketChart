@@ -1,11 +1,13 @@
 from flask import Flask, request, render_template
-from key import apikey
-import requests
 from flask_socketio import SocketIO, emit
-from getStocksGraph import GetStocksGraph
+from getStocksGraph import GetStocksGraph, getPricesForStock
 from get_tickers import get_tickers
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__, static_url_path='')
+_ = load_dotenv()
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', '')
 
 # Hold everyones stocks
 stocks = []
@@ -23,10 +25,7 @@ def index():
 def getPrices():
     """Get the prices from alphavantage"""
     stockCode = str(request.form.get("stockCode"))
-    u = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='
-    u += f"{stockCode}&apikey={apikey()}"
-    r = requests.get(u)
-    return r.json()
+    return getPricesForStock(stockCode)
 
 
 socketio = SocketIO(app)
