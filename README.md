@@ -8,6 +8,8 @@ Make as part of [FreeCodeCamp's challenge](https://www.freecodecamp.org/learn/co
 
 [Link to live project](https://limitless-ridge-52978.up.railway.app/)
 
+Also at [stocks.link477.com](https://stocks.link477.com/)
+
 ![Finished stock market chart](ChartTheStockMarket.jpg)
 
 To minify the JavaScript I used [the JavaScript minifier](https://www.toptal.com/developers/javascript-minifier)
@@ -25,35 +27,3 @@ Run with:
 ```bash
 docker run -dp 5000:5000 stockmarketchart
 ```
-
-## Python Environment
-
-```bash
-# Create environment
-python3 -m venv smc
-
-# Activate environment (Linux/Mac)
-source smc/bin/activate
-
-# Activate environment (Windows)
-smc\Scripts\activate.ps1
-
-# Install required packages
-python3 -m pip install -r requirements.txt
-```
-
-## Heroku
-
-Old procfile command
-
-```bash
-web: gunicorn wsgi:app
-```
-
-To send to heroku use:
-
-```bash
-git push heroku
-```
-
-(sign into the Heroku cli with heroku login)
