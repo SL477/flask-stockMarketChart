@@ -12,7 +12,13 @@ Also at [stocks.link477.com](https://stocks.link477.com/)
 
 ![Finished stock market chart](ChartTheStockMarket.jpg)
 
-To minify the JavaScript I used [the JavaScript minifier](https://www.toptal.com/developers/javascript-minifier)
+## JavaScript Transpile
+
+Use `tsc stocks.ts` to transpile the TypeScript into JavaScript.
+
+Use `npm run build` to combine the JavaScript files into one file using WebPack.
+
+<!-- To minify the JavaScript I used [the JavaScript minifier](https://www.toptal.com/developers/javascript-minifier) -->
 
 ## Docker
 
