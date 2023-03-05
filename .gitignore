@@ -3,3 +3,5 @@ __pycache__/
 .env
 smc/
 Pipfile.lock
+package-lock.json
+node_modules/
