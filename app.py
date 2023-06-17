@@ -74,8 +74,9 @@ def receivedStocks(data):
 def removeStock(data):
     """Remove a stock from the list"""
     global stocks
-    stocks.remove(data)
-    getStocks()
+    if data in stocks:
+        stocks.remove(data)
+        getStocks()
 
 
 if __name__ == "__main__":
