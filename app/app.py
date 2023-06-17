@@ -1,16 +1,16 @@
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO, emit
-from getStocksGraph import GetStocksGraph, getPricesForStock
-from get_tickers import get_tickers
+from .getStocksGraph import GetStocksGraph, getPricesForStock
+from .get_tickers import get_tickers
 from dotenv import load_dotenv
 import os
-import logging
+
 
 app = Flask(__name__, static_url_path='')
 _ = load_dotenv()
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', '')
 
-# Hold everyones stocks
+# Hold everyone's stocks
 stocks = []
 
 # get the data for the stock market names and tickers
@@ -37,9 +37,9 @@ def getStocks():
     global stocks
     # get the names of the stocks to send back
     dict_stocks: dict = dict(stock_symbols_name)
-    stks = [f"{x} - {dict_stocks.get(x, x)}" for x in stocks]
+    stocks_temp = [f"{x} - {dict_stocks.get(x, x)}" for x in stocks]
 
-    emit("stocks", stks, broadcast=True)
+    emit("stocks", stocks_temp, broadcast=True)
     emit("stockgraph", GetStocksGraph(
         stocks, dict_stocks).decode("utf-8"), broadcast=True)
     print("emitted stocks")
@@ -78,11 +78,3 @@ def removeStock(data):
     if data in stocks:
         stocks.remove(data)
         getStocks()
-
-
-if __name__ == "__main__":
-    # app.run()
-    logging.basicConfig(filename='app.log', filemode='a',
-                        format='%(name)s - %(levelname)s - %(message)s',
-                        level=logging.WARNING)
-    socketio.run(app, host="0.0.0.0", port=os.environ.get('PORT', '5000'))

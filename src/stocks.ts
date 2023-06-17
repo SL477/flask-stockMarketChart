@@ -5,7 +5,7 @@ import { io } from "./socket.io";
 const stocks: string[] = [];
 const socket = io();
 
-const STOCKCODE: HTMLSelectElement = document.getElementById(
+const STOCK_CODE: HTMLSelectElement = document.getElementById(
   "stockCode"
 ) as HTMLSelectElement;
 const KEY: HTMLUListElement = document.getElementById(
@@ -17,8 +17,8 @@ const HOLDER: HTMLDivElement = document.getElementById(
 const BTN: HTMLElement | null = document.getElementById("btn");
 
 function getStockPrices() {
-  if (STOCKCODE) {
-    const code: string = STOCKCODE.value;
+  if (STOCK_CODE) {
+    const code: string = STOCK_CODE.value;
     if (!code || code === "") {
       alert("Stock code is required");
       return;
@@ -30,7 +30,7 @@ function getStockPrices() {
     socket.emit("stocksrec", stocks);
 
     // delete text
-    STOCKCODE.value = "";
+    STOCK_CODE.value = "";
   }
 }
 
@@ -63,7 +63,6 @@ socket.on("message", function (event) {
 socket.on("stockgraph", function (event) {
   if (HOLDER) {
     HOLDER.innerHTML = "";
-    //console.log('stockgraph', event);
     const pic = document.createElement("img");
     pic.classList.add("pic", "center");
     pic.src = `data:image/png;base64, ${event}`;
@@ -73,10 +72,10 @@ socket.on("stockgraph", function (event) {
 });
 
 //tie the button to the enter key on the input field
-if (STOCKCODE) {
-  STOCKCODE.addEventListener("keyup", function (evnt) {
-    if (evnt.key === "Enter") {
-      evnt.preventDefault();
+if (STOCK_CODE) {
+  STOCK_CODE.addEventListener("keyup", function (ev: KeyboardEvent) {
+    if (ev.key === "Enter") {
+      ev.preventDefault();
       if (BTN) {
         BTN.click();
       }
