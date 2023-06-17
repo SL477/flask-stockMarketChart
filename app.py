@@ -4,6 +4,7 @@ from getStocksGraph import GetStocksGraph, getPricesForStock
 from get_tickers import get_tickers
 from dotenv import load_dotenv
 import os
+import logging
 
 app = Flask(__name__, static_url_path='')
 _ = load_dotenv()
@@ -81,4 +82,7 @@ def removeStock(data):
 
 if __name__ == "__main__":
     # app.run()
+    logging.basicConfig(filename='app.log', filemode='a',
+                        format='%(name)s - %(levelname)s - %(message)s',
+                        level=logging.WARNING)
     socketio.run(app, host="0.0.0.0", port=os.environ.get('PORT', '5000'))
