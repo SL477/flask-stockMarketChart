@@ -57,7 +57,8 @@ def GetStocksGraph(stocks_list: list, stock_labels: dict) -> str:
             sdf = ConvertJsonToDataFrame(getPricesForStock(s))
             if sdf is not None:
                 sdf['code'] = s
-                df = df.append(sdf)
+                # df = df.append(sdf)
+                df = pd.concat(df, sdf)
             else:
                 rmv_list.append(idx)
     # remove invalid stocks
@@ -90,7 +91,9 @@ def GetStocksGraph(stocks_list: list, stock_labels: dict) -> str:
     stringIObytes = io.BytesIO()
     plt.savefig(stringIObytes, format='jpg')
     stringIObytes.seek(0)
-    return base64.b64encode(stringIObytes.read())
+    ret = base64.b64encode(stringIObytes.read())
+    plt.close()
+    return ret
 
 
 if __name__ == '__main__':
