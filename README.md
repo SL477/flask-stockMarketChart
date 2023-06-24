@@ -31,5 +31,5 @@ docker build -t stockmarketchart .
 Run with:
 
 ```bash
-docker run -dp 5000:5000 stockmarketchart
+docker run -d -p 5000:5000 stockmarketchart
 ```
