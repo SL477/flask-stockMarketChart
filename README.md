@@ -14,7 +14,7 @@ Also at [stocks.link477.com](https://stocks.link477.com/)
 
 ## JavaScript Transpile
 
-Use `tsc stocks.ts` to transpile the TypeScript into JavaScript.
+Use `tsc stocks.ts --target es2015 --moduleResolution node` to transpile the TypeScript into JavaScript.
 
 Use `npm run build` to combine the JavaScript files into one file using WebPack.
 

@@ -1,6 +1,7 @@
 "use strict";
 
 import { io } from "./socket.io";
+import Chart from 'chart.js/auto';
 
 const stocks: string[] = [];
 const socket = io();
@@ -11,9 +12,9 @@ const STOCK_CODE: HTMLSelectElement = document.getElementById(
 const KEY: HTMLUListElement = document.getElementById(
   "key"
 ) as HTMLUListElement;
-const HOLDER: HTMLDivElement = document.getElementById(
+const HOLDER: HTMLCanvasElement = document.getElementById(
   "holder"
-) as HTMLDivElement;
+) as HTMLCanvasElement;
 const BTN: HTMLElement | null = document.getElementById("btn");
 
 function getStockPrices() {
@@ -63,11 +64,69 @@ socket.on("message", function (event) {
 socket.on("stockgraph", function (event) {
   if (HOLDER) {
     HOLDER.innerHTML = "";
-    const pic = document.createElement("img");
-    pic.classList.add("pic", "center");
-    pic.src = `data:image/png;base64, ${event}`;
-    pic.alt = "stocks";
-    HOLDER.appendChild(pic);
+    console.log('stockgraph', event, stocks);
+    // const pic = document.createElement("img");
+    // pic.classList.add("pic", "center");
+    // pic.src = `data:image/png;base64, ${event}`;
+    // pic.alt = "stocks";
+    // HOLDER.appendChild(pic);
+    if (JSON.stringify(event) === "{}") {
+      return;
+    }
+
+    const datasets: any[] = [];
+    stocks.forEach(stock => {
+        const dataset = {
+            label: stock,
+            data: event.filter(data => data.code === stock).map(data => data.close),
+            fill: false,
+            tension: 0.1,
+        };
+        datasets.push(dataset);
+    });
+
+    const labels = [...new Set(event.map(data => new Date(data.date).toLocaleDateString()))];
+  
+    new Chart(HOLDER, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: datasets,
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+                display: true,
+                text: 'Close Amount ($)',}
+          },
+          x: {
+            title: {
+                display: true,
+                text: 'Day'
+            }
+          }
+        },
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: context => {
+                        let label = context.dataset.label || '';
+
+                        if (label) {
+                            label += ': ';
+                        }
+                        if (context.parsed.y !== null) {
+                            label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                        }
+                        return label;
+                    }
+                }
+            }
+        }
+      }
+    });
   }
 });
 

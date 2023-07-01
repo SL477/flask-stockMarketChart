@@ -40,8 +40,9 @@ def getStocks():
     stocks_temp = [f"{x} - {dict_stocks.get(x, x)}" for x in stocks]
 
     emit("stocks", stocks_temp, broadcast=True)
-    emit("stockgraph", GetStocksGraph(
-        stocks, dict_stocks).decode("utf-8"), broadcast=True)
+    # emit("stockgraph", GetStocksGraph(
+    #     stocks, dict_stocks).decode("utf-8"), broadcast=True)
+    emit("stockgraph", GetStocksGraph(stocks, dict_stocks), broadcast=True)
     print("emitted stocks")
 
 

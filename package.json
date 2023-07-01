@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/SL477/flask-stockMarketChart#readme",
   "dependencies": {
+    "chart.js": "^4.3.0",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1"
   },
