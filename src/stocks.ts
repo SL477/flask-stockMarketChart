@@ -39,7 +39,7 @@ function removeStock(i: number) {
   socket.emit("removestock", stocks[i]);
 }
 
-socket.on("stocks", function (event) {
+socket.on("stocks", function (event: string[]) {
   console.log("received", event);
   const tempStocks = event;
   const tmp: string[] = [];
@@ -116,6 +116,7 @@ socket.on("stockgraph", function (event: string) {
       options: {
         responsive: true,
         maintainAspectRatio: true,
+        aspectRatio: 2,
         scales: {
           y: {
             beginAtZero: true,

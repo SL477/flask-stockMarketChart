@@ -29,7 +29,7 @@ def getPrices():
     return getPricesForStock(stockCode)
 
 
-socketio = SocketIO(app)
+socketio = SocketIO(app, debug=True)
 
 
 def getStocks():

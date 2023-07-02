@@ -82,6 +82,7 @@ socket.on("stockgraph", function (event) {
             options: {
                 responsive: true,
                 maintainAspectRatio: true,
+                aspectRatio: 2,
                 scales: {
                     y: {
                         beginAtZero: true,
