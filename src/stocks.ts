@@ -1,7 +1,7 @@
 "use strict";
 
 import { io } from "./socket.io";
-import Chart from 'chart.js/auto';
+import Chart, { ChartDataset } from 'chart.js/auto';
 
 const stocks: string[] = [];
 const socket = io();
@@ -41,12 +41,12 @@ function removeStock(i: number) {
 
 socket.on("stocks", function (event) {
   console.log("received", event);
-  const stks = event;
+  const tempStocks = event;
   const tmp: string[] = [];
   if (KEY) {
     KEY.innerHTML = "";
 
-    stks.forEach((s: string, ind: number) => {
+    tempStocks.forEach((s: string, ind: number) => {
       const split_s = s.split(" - ");
       const child: HTMLLIElement = document.createElement("li");
       child.onclick = () => removeStock(ind);
@@ -57,43 +57,65 @@ socket.on("stocks", function (event) {
   }
 });
 
-socket.on("message", function (event) {
+socket.on("message", function (event: string) {
   console.log("receivedMessage", event);
 });
 
-socket.on("stockgraph", function (event) {
+interface dataRow {
+  'open': number,
+  'high': number,
+  'low': number,
+  'close': number,
+  'adjustedClose': number,
+  'volume': number,
+  'dividend': number,
+  'splitCoefficient': number,
+  'date': string,
+  'code': string
+}
+
+let currentChart: Chart;
+socket.on("stockgraph", function (event: string) {
   if (HOLDER) {
     HOLDER.innerHTML = "";
-    console.log('stockgraph', event, stocks);
+    // console.log('stockgraph', event, stocks);
     // const pic = document.createElement("img");
     // pic.classList.add("pic", "center");
     // pic.src = `data:image/png;base64, ${event}`;
     // pic.alt = "stocks";
     // HOLDER.appendChild(pic);
-    if (JSON.stringify(event) === "{}") {
+    if (event === "{}") {
       return;
     }
 
-    const datasets: any[] = [];
+    const orgData: dataRow[] = JSON.parse(event);
+
+    const datasets: ChartDataset[] = [];
     stocks.forEach(stock => {
         const dataset = {
             label: stock,
-            data: event.filter(data => data.code === stock).map(data => data.close),
+            data: orgData.filter(data => data.code === stock).map(data => data.close),
             fill: false,
             tension: 0.1,
         };
         datasets.push(dataset);
     });
 
-    const labels = [...new Set(event.map(data => new Date(data.date).toLocaleDateString()))];
+    const labels = [...new Set(orgData.map(data => new Date(data.date).toLocaleDateString()))];
+
+    if (currentChart) {
+      currentChart.destroy();
+    }
   
-    new Chart(HOLDER, {
+    currentChart = new Chart(HOLDER, {
       type: 'line',
       data: {
         labels: labels,
         datasets: datasets,
       },
       options: {
+        responsive: true,
+        maintainAspectRatio: true,
         scales: {
           y: {
             beginAtZero: true,

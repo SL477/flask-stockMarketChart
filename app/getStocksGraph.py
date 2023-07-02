@@ -40,6 +40,9 @@ def ConvertJsonToDataFrame(data: dict) -> pd.DataFrame:
         df['high'] = df['high'].astype(float)
         df['low'] = df['low'].astype(float)
         df['volume'] = df['volume'].astype(int)
+        df['adjustedClose'] = df['adjustedClose'].astype(float)
+        df['dividend'] = df['dividend'].astype(float)
+        df['splitCoefficient'] = df['splitCoefficient'].astype(float)
         df['date'] = df.index
         return df
     except Exception as e:
