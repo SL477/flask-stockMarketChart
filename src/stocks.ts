@@ -1,7 +1,7 @@
 "use strict";
 
-import { io } from "./socket.io";
-import Chart, { ChartDataset } from 'chart.js/auto';
+import { io } from "socket.io-client";
+import Chart, { ChartDataset } from "chart.js/auto";
 
 const stocks: string[] = [];
 const socket = io();
@@ -28,7 +28,7 @@ function getStockPrices() {
       alert("Maximum of 5 stocks to track");
     }
     stocks.push(code.toUpperCase());
-    socket.emit("stocksrec", stocks);
+    socket.emit("stocksReceived", stocks);
 
     // delete text
     STOCK_CODE.value = "";
@@ -36,11 +36,11 @@ function getStockPrices() {
 }
 
 function removeStock(i: number) {
-  socket.emit("removestock", stocks[i]);
+  socket.emit("removeStock", stocks[i]);
 }
 
 socket.on("stocks", function (event: string[]) {
-  console.log("received", event);
+  console.log("received data", event);
   const tempStocks = event;
   const tmp: string[] = [];
   if (KEY) {
@@ -62,23 +62,23 @@ socket.on("message", function (event: string) {
 });
 
 interface dataRow {
-  'open': number,
-  'high': number,
-  'low': number,
-  'close': number,
-  'adjustedClose': number,
-  'volume': number,
-  'dividend': number,
-  'splitCoefficient': number,
-  'date': string,
-  'code': string
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  adjustedClose: number;
+  volume: number;
+  dividend: number;
+  splitCoefficient: number;
+  date: string;
+  code: string;
 }
 
 let currentChart: Chart;
-socket.on("stockgraph", function (event: string) {
+socket.on("stockGraph", function (event: string) {
   if (HOLDER) {
     HOLDER.innerHTML = "";
-    // console.log('stockgraph', event, stocks);
+    // console.log("stockGraph", event, stocks);
     // const pic = document.createElement("img");
     // pic.classList.add("pic", "center");
     // pic.src = `data:image/png;base64, ${event}`;
@@ -90,65 +90,76 @@ socket.on("stockgraph", function (event: string) {
 
     const orgData: dataRow[] = JSON.parse(event);
 
+    // Get the stocks
+    const tempStocks: string[] = [...new Set(orgData.map((data) => data.code))];
+
     const datasets: ChartDataset[] = [];
-    stocks.forEach(stock => {
-        const dataset = {
-            label: stock,
-            data: orgData.filter(data => data.code === stock).map(data => data.close),
-            fill: false,
-            tension: 0.1,
-        };
-        datasets.push(dataset);
+    tempStocks.forEach((stock) => {
+      const dataset = {
+        label: stock,
+        data: orgData
+          .filter((data) => data.code === stock)
+          .map((data) => data.close),
+        fill: false,
+        tension: 0.1,
+      };
+      datasets.push(dataset);
     });
 
-    const labels = [...new Set(orgData.map(data => new Date(data.date).toLocaleDateString()))];
+    const labels = [
+      ...new Set(
+        orgData.map((data) => new Date(data.date).toLocaleDateString())
+      ),
+    ];
 
     if (currentChart) {
       currentChart.destroy();
     }
-  
+
     currentChart = new Chart(HOLDER, {
-      type: 'line',
+      type: "line",
       data: {
         labels: labels,
         datasets: datasets,
       },
       options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        aspectRatio: 2,
+        maintainAspectRatio: false,
         scales: {
           y: {
             beginAtZero: true,
             title: {
-                display: true,
-                text: 'Close Amount ($)',}
+              display: true,
+              text: "Close Amount ($)",
+            },
           },
           x: {
             title: {
-                display: true,
-                text: 'Day'
-            }
-          }
+              display: true,
+              text: "Day",
+            },
+          },
         },
         plugins: {
-            tooltip: {
-                callbacks: {
-                    label: context => {
-                        let label = context.dataset.label || '';
+          tooltip: {
+            callbacks: {
+              label: (context) => {
+                let label = context.dataset.label || "";
 
-                        if (label) {
-                            label += ': ';
-                        }
-                        if (context.parsed.y !== null) {
-                            label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
-                        }
-                        return label;
-                    }
+                if (label) {
+                  label += ": ";
                 }
-            }
-        }
-      }
+                if (context.parsed.y !== null) {
+                  label += new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  }).format(context.parsed.y);
+                }
+                return label;
+              },
+            },
+          },
+        },
+      },
     });
   }
 });

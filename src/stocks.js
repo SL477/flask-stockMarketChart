@@ -1,6 +1,6 @@
 "use strict";
-import { io } from "./socket.io";
-import Chart from 'chart.js/auto';
+import { io } from "socket.io-client";
+import Chart from "chart.js/auto";
 const stocks = [];
 const socket = io();
 const STOCK_CODE = document.getElementById("stockCode");
@@ -18,16 +18,16 @@ function getStockPrices() {
             alert("Maximum of 5 stocks to track");
         }
         stocks.push(code.toUpperCase());
-        socket.emit("stocksrec", stocks);
+        socket.emit("stocksReceived", stocks);
         // delete text
         STOCK_CODE.value = "";
     }
 }
 function removeStock(i) {
-    socket.emit("removestock", stocks[i]);
+    socket.emit("removeStock", stocks[i]);
 }
 socket.on("stocks", function (event) {
-    console.log("received", event);
+    console.log("received data", event);
     const tempStocks = event;
     const tmp = [];
     if (KEY) {
@@ -46,10 +46,10 @@ socket.on("message", function (event) {
     console.log("receivedMessage", event);
 });
 let currentChart;
-socket.on("stockgraph", function (event) {
+socket.on("stockGraph", function (event) {
     if (HOLDER) {
         HOLDER.innerHTML = "";
-        // console.log('stockgraph', event, stocks);
+        // console.log("stockGraph", event, stocks);
         // const pic = document.createElement("img");
         // pic.classList.add("pic", "center");
         // pic.src = `data:image/png;base64, ${event}`;
@@ -59,62 +59,69 @@ socket.on("stockgraph", function (event) {
             return;
         }
         const orgData = JSON.parse(event);
+        // Get the stocks
+        const tempStocks = [...new Set(orgData.map((data) => data.code))];
         const datasets = [];
-        stocks.forEach(stock => {
+        tempStocks.forEach((stock) => {
             const dataset = {
                 label: stock,
-                data: orgData.filter(data => data.code === stock).map(data => data.close),
+                data: orgData
+                    .filter((data) => data.code === stock)
+                    .map((data) => data.close),
                 fill: false,
                 tension: 0.1,
             };
             datasets.push(dataset);
         });
-        const labels = [...new Set(orgData.map(data => new Date(data.date).toLocaleDateString()))];
+        const labels = [
+            ...new Set(orgData.map((data) => new Date(data.date).toLocaleDateString())),
+        ];
         if (currentChart) {
             currentChart.destroy();
         }
         currentChart = new Chart(HOLDER, {
-            type: 'line',
+            type: "line",
             data: {
                 labels: labels,
                 datasets: datasets,
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                aspectRatio: 2,
+                maintainAspectRatio: false,
                 scales: {
                     y: {
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Close Amount ($)',
-                        }
+                            text: "Close Amount ($)",
+                        },
                     },
                     x: {
                         title: {
                             display: true,
-                            text: 'Day'
-                        }
-                    }
+                            text: "Day",
+                        },
+                    },
                 },
                 plugins: {
                     tooltip: {
                         callbacks: {
-                            label: context => {
-                                let label = context.dataset.label || '';
+                            label: (context) => {
+                                let label = context.dataset.label || "";
                                 if (label) {
-                                    label += ': ';
+                                    label += ": ";
                                 }
                                 if (context.parsed.y !== null) {
-                                    label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                                    label += new Intl.NumberFormat("en-US", {
+                                        style: "currency",
+                                        currency: "USD",
+                                    }).format(context.parsed.y);
                                 }
                                 return label;
-                            }
-                        }
-                    }
-                }
-            }
+                            },
+                        },
+                    },
+                },
+            },
         });
     }
 });

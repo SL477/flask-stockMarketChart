@@ -10,7 +10,7 @@ import os
 
 
 def getPricesForStock(stock: str) -> dict:
-    """Get the prices from alphavantage"""
+    """Get the prices from AlphaVantage"""
     u = 'https://www.alphavantage.co/query'
     u += '?function=TIME_SERIES_DAILY_ADJUSTED&symbol='
     u += f"{stock}&apikey={os.environ.get('KEY', '')}"

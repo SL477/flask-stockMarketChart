@@ -24,12 +24,12 @@ def index():
 
 @app.route("/prices", methods=["POST"])
 def getPrices():
-    """Get the prices from alphavantage"""
+    """Get the prices from AlphaVantage"""
     stockCode = str(request.form.get("stockCode"))
     return getPricesForStock(stockCode)
 
 
-socketio = SocketIO(app, debug=True)
+socketio = SocketIO(app)
 
 
 def getStocks():
@@ -40,9 +40,9 @@ def getStocks():
     stocks_temp = [f"{x} - {dict_stocks.get(x, x)}" for x in stocks]
 
     emit("stocks", stocks_temp, broadcast=True)
-    # emit("stockgraph", GetStocksGraph(
+    # emit("stockGraph", GetStocksGraph(
     #     stocks, dict_stocks).decode("utf-8"), broadcast=True)
-    emit("stockgraph", GetStocksGraph(stocks, dict_stocks), broadcast=True)
+    emit("stockGraph", GetStocksGraph(stocks, dict_stocks), broadcast=True)
     print("emitted stocks")
 
 
@@ -60,7 +60,7 @@ def test(data=""):
     getStocks()
 
 
-@socketio.on("stocksrec")
+@socketio.on("stocksReceived")
 def receivedStocks(data):
     """Received a stock from the JavaScript App"""
     for stock in data:
@@ -72,7 +72,7 @@ def receivedStocks(data):
     getStocks()
 
 
-@socketio.on("removestock")
+@socketio.on("removeStock")
 def removeStock(data):
     """Remove a stock from the list"""
     global stocks

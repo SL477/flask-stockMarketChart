@@ -7,30 +7,26 @@
 		<link href="myStyle.css" rel="stylesheet"/>
 		<meta content="Tom Fishwick"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script> -->
+		<meta name="description" content="This was something I made for FreeCodeCamp's challenge to chart the stock market using sockets">
+		<link rel="stylesheet" href="bootstrap.min.css">
 	</head>
 	<body>
-		<div class="container-fluid">
+		<div class="container-fluid"></div>
 			<h1 class="center">Chart The Stock Market</h1>
 
 			<ul id="key"></ul>
-			<div class="chartHolder"><canvas id="holder"></canvas></div>
-
+			<div class="chartContainer"><canvas id="holder"></canvas></div>
+			
 			<fieldset>
 				<legend>Add Stock</legend>
 				<label for="stockCode" class="form-label">Stock Code:</label>
-				<!-- <input id="stockCode" name="stockCode" type="text" class="form-control" required/> -->
 				<div>
-					<datalist id="stockcodes">
+					<datalist id="stockCodes">
 						{% for sym, nm in stock_symbols_name %}
 							<option value="{{ sym }}">{{ nm }} - {{ sym }}</option>
 						{% endfor %}
 					</datalist>
-					<input autocomplete="on" list="stockcodes" id="stockCode" name="stockCode" class="form-control" required/>
+					<input autocomplete="on" list="stockCodes" id="stockCode" name="stockCode" class="form-control" placeholder="Pick a stock" required/>
 				</div>
 				<button class="btn btn-primary" id="btn" type="button">Submit</button>
 			</fieldset>

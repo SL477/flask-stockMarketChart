@@ -12,9 +12,13 @@ Also at [stocks.link477.com](https://stocks.link477.com/)
 
 ![Finished stock market chart](ChartTheStockMarket.jpg)
 
+## Install
+
+Use `npm install` to install the JavaScript dependencies and either pip or pipenv to install the Python dependencies.
+
 ## JavaScript Transpile
 
-Use `tsc stocks.ts --target es2015 --moduleResolution node` to transpile the TypeScript into JavaScript.
+Use `tsc` to transpile the TypeScript into JavaScript.
 
 Use `npm run build` to combine the JavaScript files into one file using WebPack.
 
