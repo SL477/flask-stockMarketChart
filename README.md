@@ -24,6 +24,14 @@ Use `npm run build` to combine the JavaScript files into one file using WebPack.
 
 <!-- To minify the JavaScript I used [the JavaScript minifier](https://www.toptal.com/developers/javascript-minifier) -->
 
+## Run Python server
+
+Use the following command to run the Flask server
+
+```bash
+py -m app
+```
+
 ## Docker
 
 Build with:
