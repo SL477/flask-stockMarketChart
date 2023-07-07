@@ -18,6 +18,8 @@ Use `npm install` to install the JavaScript dependencies and either pip or pipen
 
 ## JavaScript Transpile
 
+Use `npx prettier . --write` to run Prettier to format the code.
+
 Use `tsc` to transpile the TypeScript into JavaScript.
 
 Use `npm run build` to combine the JavaScript files into one file using WebPack.

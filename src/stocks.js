@@ -1,6 +1,8 @@
 "use strict";
 import { io } from "socket.io-client";
-import Chart from "chart.js/auto";
+import { Chart, Colors, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend, } from "chart.js";
+// Tree shake Chart.JS
+Chart.register(Colors, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend);
 const stocks = [];
 const socket = io();
 const STOCK_CODE = document.getElementById("stockCode");

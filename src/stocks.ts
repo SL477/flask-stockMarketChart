@@ -1,19 +1,41 @@
 "use strict";
 
 import { io } from "socket.io-client";
-import Chart, { ChartDataset } from "chart.js/auto";
+import {
+  Chart,
+  Colors,
+  ChartDataset,
+  LineController,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+} from "chart.js";
+// Tree shake Chart.JS
+Chart.register(
+  Colors,
+  LineController,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+);
 
 const stocks: string[] = [];
 const socket = io();
 
 const STOCK_CODE: HTMLSelectElement = document.getElementById(
-  "stockCode"
+  "stockCode",
 ) as HTMLSelectElement;
 const KEY: HTMLUListElement = document.getElementById(
-  "key"
+  "key",
 ) as HTMLUListElement;
 const HOLDER: HTMLCanvasElement = document.getElementById(
-  "holder"
+  "holder",
 ) as HTMLCanvasElement;
 const BTN: HTMLElement | null = document.getElementById("btn");
 
@@ -108,7 +130,7 @@ socket.on("stockGraph", function (event: string) {
 
     const labels = [
       ...new Set(
-        orgData.map((data) => new Date(data.date).toLocaleDateString())
+        orgData.map((data) => new Date(data.date).toLocaleDateString()),
       ),
     ];
 
