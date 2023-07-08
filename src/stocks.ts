@@ -65,8 +65,9 @@ function getStockPrices() {
  * This to send a particular stock to be removed
  * @param i Index of stock to remove
  */
-function removeStock(i: number) {
-  socket.emit("removeStock", stocks[i]);
+function removeStock(stock: string) {
+  console.log("remove", stock);
+  socket.emit("removeStock", stock);
 }
 
 socket.on("stocks", function (event: string[]) {
@@ -76,10 +77,16 @@ socket.on("stocks", function (event: string[]) {
   if (KEY) {
     KEY.innerHTML = "";
 
-    tempStocks.forEach((s: string, ind: number) => {
+    tempStocks.forEach((s: string) => {
       const split_s = s.split(" - ");
       const child: HTMLLIElement = document.createElement("li");
-      child.onclick = () => removeStock(ind);
+      child.onclick = () => removeStock(split_s[0]);
+      child.tabIndex = KEY.childNodes.length + 1;
+      child.onkeydown = (ev: KeyboardEvent) => {
+        if (ev.key === "Enter") {
+          removeStock(split_s[0]);
+        }
+      };
       child.textContent = s;
       KEY.appendChild(child);
       tmp.push(split_s[0]);
@@ -109,6 +116,12 @@ let currentChart: Chart;
 socket.on("stockGraph", function (event: string) {
   if (HOLDER) {
     HOLDER.innerHTML = "";
+
+    // remove the current chart
+    if (currentChart) {
+      currentChart.destroy();
+    }
+
     if (event === "{}") {
       return;
     }
@@ -136,10 +149,6 @@ socket.on("stockGraph", function (event: string) {
         orgData.map((data) => new Date(data.date).toLocaleDateString()),
       ),
     ];
-
-    if (currentChart) {
-      currentChart.destroy();
-    }
 
     currentChart = new Chart(HOLDER, {
       type: "line",
