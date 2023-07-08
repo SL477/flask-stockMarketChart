@@ -2,13 +2,11 @@
 
 Chart the stock market
 
-Uses [Alpha Vantage to get the data](https://www.alphavantage.co/documentation/)
+Uses [Alpha Vantage to get the data](https://www.alphavantage.co/documentation/).
 
-Make as part of [FreeCodeCamp's challenge](https://www.freecodecamp.org/learn/coding-interview-prep/take-home-projects/chart-the-stock-market)
+Originally made as part of [FreeCodeCamp's challenge](https://www.freecodecamp.org/learn/coding-interview-prep/take-home-projects/chart-the-stock-market).
 
-[Link to live project](https://limitless-ridge-52978.up.railway.app/)
-
-Also at [stocks.link477.com](https://stocks.link477.com/)
+Link to live project at [stocks.link477.com](https://stocks.link477.com/)
 
 ![Finished stock market chart](ChartTheStockMarket.jpg)
 
