@@ -33,23 +33,19 @@ def getStocks():
     stocks_temp = [f"{x} - {dict_stocks.get(x, x)}" for x in stocks]
 
     emit("stocks", stocks_temp, broadcast=True)
-    # emit("stockGraph", GetStocksGraph(
-    #     stocks, dict_stocks).decode("utf-8"), broadcast=True)
-    emit("stockGraph", GetStocksGraph(stocks, dict_stocks), broadcast=True)
+    emit("stockGraph", GetStocksGraph(stocks), broadcast=True)
     print("emitted stocks")
 
 
 @socketio.on('message')
 def handle_message(data):
     print("received message: " + data)
-    # emit('stocks', getStocks())
     getStocks()
 
 
 @socketio.on("connect")
 def test(data=""):
     """When the items connect emit the current list of stocks"""
-    # emit("stocks", getStocks())
     getStocks()
 
 
@@ -72,6 +68,7 @@ def removeStock(data):
     if data in stocks:
         stocks.remove(data)
         getStocks()
+
 
 @socketio.on("getTickers")
 def sendStockTickers():

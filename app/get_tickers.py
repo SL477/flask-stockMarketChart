@@ -15,10 +15,6 @@ def get_tickers() -> list:
     df: pd.DataFrame = pd.read_csv(url)
     df.sort_values(['name', 'symbol'], inplace=True)
 
-    # stock_symbols = df['symbol'].to_list()
-    # stock_name = df['name'].fillna('').to_list()
-    # return list(zip(stock_symbols, stock_name))
-
     df = df[['symbol', 'name']]
     df = df[df['symbol'].notnull()]
     df['name'].fillna('', inplace=True)
