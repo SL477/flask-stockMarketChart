@@ -1,6 +1,6 @@
-from flask import Flask, request, render_template
+from flask import Flask, redirect, url_for
 from flask_socketio import SocketIO, emit
-from .getStocksGraph import GetStocksGraph, getPricesForStock
+from .getStocksGraph import GetStocksGraph
 from .get_tickers import get_tickers
 from dotenv import load_dotenv
 import os
@@ -19,14 +19,7 @@ stock_symbols_name = get_tickers()
 
 @app.route("/")
 def index():
-    return render_template("index.html", stock_symbols_name=stock_symbols_name)
-
-
-@app.route("/prices", methods=["POST"])
-def getPrices():
-    """Get the prices from alphavantage"""
-    stockCode = str(request.form.get("stockCode"))
-    return getPricesForStock(stockCode)
+    return redirect(url_for('static', filename='index.html'))
 
 
 socketio = SocketIO(app)
@@ -40,26 +33,23 @@ def getStocks():
     stocks_temp = [f"{x} - {dict_stocks.get(x, x)}" for x in stocks]
 
     emit("stocks", stocks_temp, broadcast=True)
-    emit("stockgraph", GetStocksGraph(
-        stocks, dict_stocks).decode("utf-8"), broadcast=True)
+    emit("stockGraph", GetStocksGraph(stocks), broadcast=True)
     print("emitted stocks")
 
 
 @socketio.on('message')
 def handle_message(data):
     print("received message: " + data)
-    # emit('stocks', getStocks())
     getStocks()
 
 
 @socketio.on("connect")
 def test(data=""):
     """When the items connect emit the current list of stocks"""
-    # emit("stocks", getStocks())
     getStocks()
 
 
-@socketio.on("stocksrec")
+@socketio.on("stocksReceived")
 def receivedStocks(data):
     """Received a stock from the JavaScript App"""
     for stock in data:
@@ -71,10 +61,16 @@ def receivedStocks(data):
     getStocks()
 
 
-@socketio.on("removestock")
+@socketio.on("removeStock")
 def removeStock(data):
     """Remove a stock from the list"""
     global stocks
     if data in stocks:
         stocks.remove(data)
         getStocks()
+
+
+@socketio.on("getTickers")
+def sendStockTickers():
+    print("sendingTickers")
+    emit("stockTickers", str(stock_symbols_name))

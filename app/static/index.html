@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Chart the Stock Market</title>
+		<link rel="icon" href="https://link477.com/assets/images/link477.png"/>
+		<link href="myStyle.min.css" rel="stylesheet"/>
+		<meta content="Tom Fishwick"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<meta name="description" content="This was something I made for FreeCodeCamp's challenge to chart the stock market using sockets">
+	</head>
+	<body>
+		<div class="container-fluid"></div>
+			<h1 class="center">Chart The Stock Market</h1>
+
+			<ul id="key"></ul>
+			<div class="chartContainer"><canvas id="holder"></canvas></div>
+			
+			<fieldset>
+				<legend>Add Stock</legend>
+				<label for="stockCode" class="form-label">Stock Code:</label>
+				<div>
+					<!-- <datalist id="stockCodes">
+						{% for sym, nm in stock_symbols_name %}
+							<option value="{{ sym }}">{{ nm }} - {{ sym }}</option>
+						{% endfor %}
+					</datalist>-->
+                    <datalist id="stockCodes"></datalist>
+					<input autocomplete="on" list="stockCodes" id="stockCode" name="stockCode" class="form-control" placeholder="Pick a stock" required/>
+				</div>
+				<button class="btn btn-primary" id="btn" type="button">Submit</button>
+			</fieldset>
+		</div>
+		<script src="stocks.js" async></script>
+    </body>
+</html>

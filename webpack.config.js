@@ -6,4 +6,5 @@ module.exports = {
         filename: 'stocks.js',
         path: path.resolve(__dirname, 'app', 'static'),
     },
+    mode: 'production'
 };

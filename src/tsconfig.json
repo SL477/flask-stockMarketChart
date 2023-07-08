@@ -1,0 +1,9 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "target": "ES2015",
+        "moduleResolution": "Node",
+        "strict": true,
+        "forceConsistentCasingInFileNames": true
+    }
+}

@@ -1,0 +1,15 @@
+node_modules/
+static/
+__pycache__/
+*.js
+*.json
+.flake8
+.env
+*.log
+*.jpg
+Pipfile
+Pipfile.lock
+*.md
+*.txt
+webpack.config.js
+*.html
