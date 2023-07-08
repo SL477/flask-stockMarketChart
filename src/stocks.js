@@ -9,6 +9,10 @@ const STOCK_CODE = document.getElementById("stockCode");
 const KEY = document.getElementById("key");
 const HOLDER = document.getElementById("holder");
 const BTN = document.getElementById("btn");
+/**
+ * This is to get the selected stock market ticker
+ * @returns void
+ */
 function getStockPrices() {
     if (STOCK_CODE) {
         const code = STOCK_CODE.value;
@@ -25,6 +29,10 @@ function getStockPrices() {
         STOCK_CODE.value = "";
     }
 }
+/**
+ * This to send a particular stock to be removed
+ * @param i Index of stock to remove
+ */
 function removeStock(i) {
     socket.emit("removeStock", stocks[i]);
 }
@@ -51,12 +59,6 @@ let currentChart;
 socket.on("stockGraph", function (event) {
     if (HOLDER) {
         HOLDER.innerHTML = "";
-        // console.log("stockGraph", event, stocks);
-        // const pic = document.createElement("img");
-        // pic.classList.add("pic", "center");
-        // pic.src = `data:image/png;base64, ${event}`;
-        // pic.alt = "stocks";
-        // HOLDER.appendChild(pic);
         if (event === "{}") {
             return;
         }
@@ -127,6 +129,7 @@ socket.on("stockGraph", function (event) {
         });
     }
 });
+//#endregion
 //tie the button to the enter key on the input field
 if (STOCK_CODE) {
     STOCK_CODE.addEventListener("keyup", function (ev) {
@@ -141,3 +144,26 @@ if (STOCK_CODE) {
 if (BTN) {
     BTN.addEventListener("click", getStockPrices);
 }
+//#region "Get the stock market tickers"
+socket.emit("getTickers");
+/**
+ * This is to append all of the stock tickers to the datalist
+ * @param TickerArray Retrieved from the backend, [code, description]
+ */
+function AppendToStockCodes(TickerArray) {
+    const stockCodes = document.getElementById("stockCodes");
+    if (stockCodes) {
+        TickerArray.forEach(ticker => {
+            const tickerOption = document.createElement('option');
+            tickerOption.value = ticker[0];
+            tickerOption.text = `${ticker[0]} - ${ticker[1]}`;
+            stockCodes.append(tickerOption);
+        });
+    }
+}
+socket.on("stockTickers", (msg) => {
+    // convert to array of arrays
+    msg = msg.replace(/'/g, '"').replace(/\(/g, '[').replace(/\)/g, ']');
+    // console.log('stockTickers', msg);
+    AppendToStockCodes(JSON.parse(msg));
+});

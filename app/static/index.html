@@ -20,11 +20,12 @@
 				<legend>Add Stock</legend>
 				<label for="stockCode" class="form-label">Stock Code:</label>
 				<div>
-					<datalist id="stockCodes">
+					<!-- <datalist id="stockCodes">
 						{% for sym, nm in stock_symbols_name %}
 							<option value="{{ sym }}">{{ nm }} - {{ sym }}</option>
 						{% endfor %}
-					</datalist>
+					</datalist>-->
+                    <datalist id="stockCodes"></datalist>
 					<input autocomplete="on" list="stockCodes" id="stockCode" name="stockCode" class="form-control" placeholder="Pick a stock" required/>
 				</div>
 				<button class="btn btn-primary" id="btn" type="button">Submit</button>

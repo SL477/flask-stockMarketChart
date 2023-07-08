@@ -1,6 +1,6 @@
-from flask import Flask, request, render_template
+from flask import Flask, redirect, url_for
 from flask_socketio import SocketIO, emit
-from .getStocksGraph import GetStocksGraph, getPricesForStock
+from .getStocksGraph import GetStocksGraph
 from .get_tickers import get_tickers
 from dotenv import load_dotenv
 import os
@@ -19,14 +19,7 @@ stock_symbols_name = get_tickers()
 
 @app.route("/")
 def index():
-    return render_template("index.html", stock_symbols_name=stock_symbols_name)
-
-
-@app.route("/prices", methods=["POST"])
-def getPrices():
-    """Get the prices from AlphaVantage"""
-    stockCode = str(request.form.get("stockCode"))
-    return getPricesForStock(stockCode)
+    return redirect(url_for('static', filename='index.html'))
 
 
 socketio = SocketIO(app)
@@ -79,3 +72,8 @@ def removeStock(data):
     if data in stocks:
         stocks.remove(data)
         getStocks()
+
+@socketio.on("getTickers")
+def sendStockTickers():
+    print("sendingTickers")
+    emit("stockTickers", str(stock_symbols_name))
