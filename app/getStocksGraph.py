@@ -6,8 +6,9 @@ import os
 
 def getPricesForStock(stock: str) -> dict:
     """Get the prices from AlphaVantage"""
-    u = 'https://www.alphavantage.co/query'
-    u += '?function=TIME_SERIES_DAILY_ADJUSTED&symbol='
+    # u = 'https://www.alphavantage.co/query'
+    # u += '?function=TIME_SERIES_DAILY_ADJUSTED&symbol='
+    u = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='
     u += f"{stock}&apikey={os.environ.get('KEY', '')}"
     r = requests.get(u)
     return r.json()
@@ -25,18 +26,19 @@ def ConvertJsonToDataFrame(data: dict) -> pd.DataFrame:
             '2. high': 'high',
             '3. low': 'low',
             '4. close': 'close',
-            '5. adjusted close': 'adjustedClose',
-            '6. volume': 'volume',
-            '7. dividend amount': 'dividend',
-            '8. split coefficient': 'splitCoefficient'})
+            '5. volume': 'volume'})
+            # # '5. adjusted close': 'adjustedClose',
+            # '6. volume': 'volume',
+            # '7. dividend amount': 'dividend',
+            # '8. split coefficient': 'splitCoefficient'})
         df['close'] = df['close'].astype(float)
         df['open'] = df['open'].astype(float)
         df['high'] = df['high'].astype(float)
         df['low'] = df['low'].astype(float)
         df['volume'] = df['volume'].astype(int)
-        df['adjustedClose'] = df['adjustedClose'].astype(float)
-        df['dividend'] = df['dividend'].astype(float)
-        df['splitCoefficient'] = df['splitCoefficient'].astype(float)
+        # df['adjustedClose'] = df['adjustedClose'].astype(float)
+        # df['dividend'] = df['dividend'].astype(float)
+        # df['splitCoefficient'] = df['splitCoefficient'].astype(float)
         df['date'] = df.index
         return df
     except Exception as e:
