@@ -13,6 +13,10 @@ def get_tickers() -> list:
     url = "https://www.alphavantage.co/query?function=LISTING_STATUS&apikey="
     url += os.environ.get('KEY', '')
     df: pd.DataFrame = pd.read_csv(url)
+    if df.empty:
+        print('[get_tickers] empty dataframe - ', os.environ.get('KEY', ''))
+        return []
+
     df.sort_values(['name', 'symbol'], inplace=True)
 
     df = df[['symbol', 'name']]
