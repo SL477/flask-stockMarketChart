@@ -14,7 +14,7 @@ def get_tickers() -> list:
     url += os.environ.get('KEY', '')
     df: pd.DataFrame = pd.read_csv(url)
     if df.empty:
-        print('[get_tickers] empty dataframe - ', os.environ.get('KEY', ''))
+        print('[get_tickers] empty dataframe - ', os.environ.get('KEY', ''), flush=True)
         return []
 
     df.sort_values(['name', 'symbol'], inplace=True)

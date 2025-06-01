@@ -42,7 +42,7 @@ def ConvertJsonToDataFrame(data: dict) -> pd.DataFrame:
         df['date'] = df.index
         return df
     except Exception as e:
-        print('data', data, 'Exception:', e)
+        print('data', data, 'Exception:', e, flush=True)
 
 
 def GetStocksGraph(stocks_list: list) -> str:

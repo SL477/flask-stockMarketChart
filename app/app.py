@@ -4,6 +4,7 @@ from .getStocksGraph import GetStocksGraph
 from .get_tickers import get_tickers
 from dotenv import load_dotenv
 import os
+import logging
 
 
 app = Flask(__name__, static_url_path='')
@@ -34,12 +35,14 @@ def getStocks():
 
     emit("stocks", stocks_temp, broadcast=True)
     emit("stockGraph", GetStocksGraph(stocks), broadcast=True)
-    print("emitted stocks")
+    print("emitted stocks", flush=True)
+    app.logger.info("emitted stocks")
 
 
 @socketio.on('message')
 def handle_message(data):
-    print("received message: " + data)
+    print("received message: " + data, flush=True)
+    app.logger.info("received message: " + data)
     getStocks()
 
 
@@ -53,7 +56,8 @@ def test(data=""):
 def receivedStocks(data):
     """Received a stock from the JavaScript App"""
     for stock in data:
-        print("Received message: " + stock)
+        print("Received message: " + stock, flush=True)
+        app.logger.info("Received message: " + stock)
         global stocks
         if stock not in stocks:
             if len(stocks) < 5:
@@ -72,5 +76,6 @@ def removeStock(data):
 
 @socketio.on("getTickers")
 def sendStockTickers():
-    print("sendingTickers")
+    print("sendingTickers", flush=True)
+    app.logger.info("sendingTickers")
     emit("stockTickers", str(stock_symbols_name))
